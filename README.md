@@ -6,6 +6,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 * React-router-dom:   npm install react-router-dom
 * Material ui: npm install @material-ui/core
+* Styles: npm install @material-ui/styles
 
 
 ## Instructions
