@@ -7,6 +7,8 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Button from "@material-ui/core/Button";
 import {Link} from "react-router-dom";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
 import logo from '../../assets/logo.svg'
 
@@ -59,9 +61,21 @@ const Header = (props) =>{
     const classes = useStyles();
 
     const [value, setValue] = useState(0);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [open, setOpen] = useState(false);
 
     const handleChange = (e, value) => {
         setValue(value);
+    }
+
+    const handleOpenMenuClick = (e) => {
+        setAnchorEl(e.currentTarget);
+        setOpen(true);
+    }
+
+    const handleCloseMenuClick = (e) => {
+        setAnchorEl(null);
+        setOpen(false);
     }
 
     useEffect(() => {
@@ -80,11 +94,57 @@ const Header = (props) =>{
 
                         <Tabs value={value} className={classes.tabContainer} onChange={handleChange}>
                             <Tab label="Home" className={classes.tab} component={Link} to="/"/>
-                            <Tab label="Services" className={classes.tab} component={Link} to="/services"/>
+                            <Tab 
+                                aria-owns={anchorEl ? "simple-menu" : undefined}
+                                aria-haspopup={anchorEl ? "true" : undefined}
+                                onMouseOver={(event) => handleOpenMenuClick(event)}
+                                
+                                label="Services" 
+                                className={classes.tab} 
+                                component={Link} 
+                                to="/services"/>
                             <Tab label="The Revolution" className={classes.tab} component={Link} to="/revolution"/>
                             <Tab label="About us" className={classes.tab} component={Link} to="/about"/>
                             <Tab label="Contact us" className={classes.tab} component={Link} to="/contact"/>
                         </Tabs>  
+                        <Menu 
+                            id="simple-menu" 
+                            anchorEl={anchorEl} 
+                            open={open} 
+                            onClose={handleCloseMenuClick}
+                            MenuListProps={{onMouseLeave: handleCloseMenuClick}}>
+                                                            <MenuItem 
+                                onClick={() => {
+                                    handleCloseMenuClick();
+                                    setValue(1);
+                                }} 
+                                component={Link} 
+                                to="/services">Services
+                            </MenuItem>
+                            <MenuItem 
+                                onClick={() => {
+                                    handleCloseMenuClick();
+                                    setValue(1);
+                                }} 
+                                component={Link} 
+                                to="/customersoftware">Custom Software Development
+                            </MenuItem>
+                            <MenuItem 
+                                onClick={() => {
+                                    handleCloseMenuClick();
+                                    setValue(1);
+                                }}  
+                                component={Link} 
+                                to="/mobileapps">Mobile App Development
+                            </MenuItem>
+                            <MenuItem 
+                                onClick={() => {
+                                    handleCloseMenuClick();
+                                    setValue(1);
+                                }} 
+                                component={Link} to="/websites">Website Development
+                            </MenuItem>
+                        </Menu>
                         <Button variant="contained" color="secondary" className={classes.button}>Free Estimate</Button>
                     </Toolbar>
 
