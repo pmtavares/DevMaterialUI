@@ -53,6 +53,17 @@ const useStyles = makeStyles(theme => ({
         "&:hover":{
             backgroundColor: "transparent"
         }
+    },
+    menu: {
+        backgroundColor: theme.palette.common.arcBlue,
+        color: "white"
+    },
+    menuItem:{
+        ...theme.typography.tab,
+        opacity: 0.7,
+        "&:hover":{
+            opacity: 1
+        }
     }
 
 }))
@@ -112,14 +123,19 @@ const Header = (props) =>{
                             anchorEl={anchorEl} 
                             open={open} 
                             onClose={handleCloseMenuClick}
-                            MenuListProps={{onMouseLeave: handleCloseMenuClick}}>
-                                                            <MenuItem 
+                            MenuListProps={{onMouseLeave: handleCloseMenuClick}}
+                            classes={{paper: classes.menu}}
+                            elevation={0}
+                            >
+                            <MenuItem 
                                 onClick={() => {
                                     handleCloseMenuClick();
                                     setValue(1);
                                 }} 
                                 component={Link} 
-                                to="/services">Services
+                                to="/services"
+                                classes={{root: classes.menuItem}}
+                                >Services
                             </MenuItem>
                             <MenuItem 
                                 onClick={() => {
@@ -127,7 +143,9 @@ const Header = (props) =>{
                                     setValue(1);
                                 }} 
                                 component={Link} 
-                                to="/customersoftware">Custom Software Development
+                                to="/customersoftware"
+                                classes={{root: classes.menuItem}}
+                                >Custom Software Development
                             </MenuItem>
                             <MenuItem 
                                 onClick={() => {
@@ -135,14 +153,18 @@ const Header = (props) =>{
                                     setValue(1);
                                 }}  
                                 component={Link} 
-                                to="/mobileapps">Mobile App Development
+                                to="/mobileapps"
+                                classes={{root: classes.menuItem}}>
+                                    Mobile App Development
                             </MenuItem>
                             <MenuItem 
                                 onClick={() => {
                                     handleCloseMenuClick();
                                     setValue(1);
                                 }} 
-                                component={Link} to="/websites">Website Development
+                                component={Link} to="/websites"
+                                classes={{root: classes.menuItem}}
+                                >Website Development
                             </MenuItem>
                         </Menu>
                         <Button variant="contained" color="secondary" className={classes.button}>Free Estimate</Button>
