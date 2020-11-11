@@ -74,6 +74,7 @@ const Header = (props) =>{
     const [value, setValue] = useState(0);
     const [anchorEl, setAnchorEl] = useState(null);
     const [open, setOpen] = useState(false);
+    const [selectedIndex, setSelectedIndex] = useState(0);
 
     const handleChange = (e, value) => {
         setValue(value);
@@ -89,10 +90,23 @@ const Header = (props) =>{
         setOpen(false);
     }
 
-    useEffect(() => {
-        RefreshRouter(setValue, value);
+    const handleMenuItemClick = (e, i) => {
+        setAnchorEl(null);
+        setOpen(false);
+        setSelectedIndex(i)
+    }
 
-    }, [])
+    const menuOptions = [
+        {name: "Services", link:"/services"},
+        {name: "Custom Software", link:"/customersoftware"},
+        {name: "Mobile App development", link:"/mobileapps"},
+        {name: "Website", link:"/websites"}
+    ]
+
+    useEffect(() => {
+        RefreshRouter(setValue, setSelectedIndex, value);
+
+    }, [value])
       
     return(
         <Fragment>
@@ -127,45 +141,27 @@ const Header = (props) =>{
                             classes={{paper: classes.menu}}
                             elevation={0}
                             >
-                            <MenuItem 
-                                onClick={() => {
-                                    handleCloseMenuClick();
-                                    setValue(1);
-                                }} 
-                                component={Link} 
-                                to="/services"
-                                classes={{root: classes.menuItem}}
-                                >Services
-                            </MenuItem>
-                            <MenuItem 
-                                onClick={() => {
-                                    handleCloseMenuClick();
-                                    setValue(1);
-                                }} 
-                                component={Link} 
-                                to="/customersoftware"
-                                classes={{root: classes.menuItem}}
-                                >Custom Software Development
-                            </MenuItem>
-                            <MenuItem 
-                                onClick={() => {
-                                    handleCloseMenuClick();
-                                    setValue(1);
-                                }}  
-                                component={Link} 
-                                to="/mobileapps"
-                                classes={{root: classes.menuItem}}>
-                                    Mobile App Development
-                            </MenuItem>
-                            <MenuItem 
-                                onClick={() => {
-                                    handleCloseMenuClick();
-                                    setValue(1);
-                                }} 
-                                component={Link} to="/websites"
-                                classes={{root: classes.menuItem}}
-                                >Website Development
-                            </MenuItem>
+
+                            {
+
+                                menuOptions.map((option, i) => (
+                                    <MenuItem 
+                                    component={Link} 
+                                    to={option.link} 
+                                    classes={{root: classes.menuItem}}
+                                    onClick={event => {
+                                        console.log(i)
+                                        handleMenuItemClick(event, i);
+                                        setValue(1);
+                                        handleCloseMenuClick();
+                                    }} 
+                                    selected={i === selectedIndex && value === 1}
+                                    key={option.link}>
+                                    {option.name}
+                                    </MenuItem>
+
+                                ))
+                            }   
                         </Menu>
                         <Button variant="contained" color="secondary" className={classes.button}>Free Estimate</Button>
                     </Toolbar>
@@ -180,30 +176,70 @@ const Header = (props) =>{
 }
 
 
-const RefreshRouter = (setValue, value) =>{
-    if(window.location.pathname === "/" && value !== 0)
+const RefreshRouter = (setValue, setSelectedIndex, value) =>{
+
+    switch(window.location.pathname)
     {
-        setValue(0);
-    }
-    else if(window.location.pathname === "/services" && value !== 1)
-    {
-        setValue(1);
-    }
-    else if(window.location.pathname === "/revolution" && value !== 2)
-    {
-        setValue(2);
-    }
-    else if(window.location.pathname === "/about" && value !== 3)
-    {
-        setValue(3);
-    }
-    else if(window.location.pathname === "/contact" && value !== 4)
-    {
-        setValue(4);
-    }
-    else if(window.location.pathname === "/estimate" && value !== 5)
-    {
-        setValue(5);
+        case "/": 
+            if(value !== 0)
+            {
+                setValue(0)
+            }
+            break;
+        case "/services": 
+            if(value !== 1)
+            {
+                setValue(1)
+                setSelectedIndex(0)
+            }
+            break;
+        case "/customersoftware": 
+            if(value !== 1)
+            {
+                setValue(1)
+                setSelectedIndex(1)
+            }
+            break;
+        case "/mobileapps": 
+            if(value !== 1)
+            {
+                setValue(1)
+                setSelectedIndex(2)
+            }
+            break;
+        case "/websites": 
+            if(value !== 1)
+            {
+                setValue(1)
+                setSelectedIndex(3)
+            }
+            break;
+        case "/revolution": 
+            if(value !== 2)
+            {
+                setValue(2)
+            }
+            break;
+        case "/about": 
+            if(value !== 3)
+            {
+                setValue(3)
+            }
+            break;
+        case "/contact": 
+            if(value !== 4)
+            {
+                setValue(4)
+            } 
+            break;
+        case "/estimate": 
+            if(value !== 5)
+            {
+                setValue(5)
+            } 
+            break;
+        default:
+            break;  
     }
 
 
