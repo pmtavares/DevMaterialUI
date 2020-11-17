@@ -9,8 +9,12 @@ import Button from "@material-ui/core/Button";
 import {Link} from "react-router-dom";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-
-import logo from '../../assets/logo.svg'
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import {useTheme} from "@material-ui/styles";
+import logo from '../../assets/logo.svg';
+import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
+import MenuIcon from "@material-ui/icons/Menu";
+import IconButton from "@material-ui/core/IconButton";
 
 const ElevationScroll = (props) => {
     const { children } = props;
@@ -28,10 +32,23 @@ const ElevationScroll = (props) => {
 const useStyles = makeStyles(theme => ({
     toolbarMargin:{
         ...theme.mixins.toolbar,
-        marginBottom: "3em"
+        marginBottom: "3em",
+        [theme.breakpoints.down("md")]:{
+            marginBottom: "2em"
+        },
+        [theme.breakpoints.down("xs")]:{
+            marginBottom: "1.25em"
+        }
+
     },
     logo:{
-        height: "8em"
+        height: "8em",
+        [theme.breakpoints.down("md")]:{
+            height: "7em"
+        },
+        [theme.breakpoints.down("xs")]:{
+            height: "5.5em"
+        }
     },
     tabContainer:  {
         marginLeft: "auto"
@@ -64,35 +81,50 @@ const useStyles = makeStyles(theme => ({
         "&:hover":{
             opacity: 1
         }
+    },
+    drawerIconContainer : {
+        "&:hover":{
+            backgroundColor: "transparent"
+        },
+        marginLeft: "auto"
+    },
+    drawerIcon :{
+        height: "50px",
+        width: "50px"
     }
 
 }))
 
 const Header = (props) =>{
     const classes = useStyles();
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.down("md"));
+    
+    const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const [openDrawer, setOpenDrawer] = useState(false);
 
     const [value, setValue] = useState(0);
     const [anchorEl, setAnchorEl] = useState(null);
-    const [open, setOpen] = useState(false);
+    const [openMenu, setOpenMenu] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(0);
 
-    const handleChange = (e, value) => {
-        setValue(value);
+    const handleChange = (e, newValue) => {
+        setValue(newValue);
     }
 
     const handleOpenMenuClick = (e) => {
         setAnchorEl(e.currentTarget);
-        setOpen(true);
+        setOpenMenu(true);
     }
 
     const handleCloseMenuClick = (e) => {
         setAnchorEl(null);
-        setOpen(false);
+        setOpenMenu(false);
     }
 
     const handleMenuItemClick = (e, i) => {
         setAnchorEl(null);
-        setOpen(false);
+        setOpenMenu(false);
         setSelectedIndex(i)
     }
 
@@ -107,7 +139,79 @@ const Header = (props) =>{
         RefreshRouter(setValue, setSelectedIndex, value);
 
     }, [value])
+
+    const tabs = (        
+        <Fragment>
+            <Tabs value={value} className={classes.tabContainer} onChange={handleChange}>
+                <Tab label="Home" className={classes.tab} component={Link} to="/"/>
+                <Tab 
+                    aria-owns={anchorEl ? "simple-menu" : undefined}
+                    aria-haspopup={anchorEl ? "true" : undefined}
+                    onMouseOver={(event) => handleOpenMenuClick(event)}
+                    
+                    label="Services" 
+                    className={classes.tab} 
+                    component={Link} 
+                    to="/services"/>
+                <Tab label="The Revolution" className={classes.tab} component={Link} to="/revolution"/>
+                <Tab label="About us" className={classes.tab} component={Link} to="/about"/>
+                <Tab label="Contact us" className={classes.tab} component={Link} to="/contact"/>
+            </Tabs>  
+            <Menu 
+                id="simple-menu" 
+                anchorEl={anchorEl} 
+                open={openMenu} 
+                onClose={handleCloseMenuClick}
+                MenuListProps={{onMouseLeave: handleCloseMenuClick}}
+                classes={{paper: classes.menu}}
+                elevation={0}
+                >
+
+                {
+
+                    menuOptions.map((option, i) => (
+                        <MenuItem 
+                        component={Link} 
+                        to={option.link} 
+                        classes={{root: classes.menuItem}}
+                        onClick={event => {
+                            console.log(i)
+                            handleMenuItemClick(event, i);
+                            setValue(1);
+                            handleCloseMenuClick();
+                        }} 
+                        selected={i === selectedIndex && value === 1}
+                        key={option.link}>
+                        {option.name}
+                        </MenuItem>
+
+                    ))
+                }   
+            </Menu>
+            <Button variant="contained" color="secondary" className={classes.button}>Free Estimate</Button>
+        </Fragment>
+    )
       
+    const drawer = (
+        
+            <Fragment>
+                <SwipeableDrawer
+                    disableBackdropTransition={!iOS} disableDiscovery={iOS}
+                    open={openDrawer}
+                    onClose={() => setOpenDrawer(false)}
+                    onOpen ={() => setOpenDrawer(true)}
+                >
+                   
+                    Example drawer
+                </SwipeableDrawer>
+                <IconButton onClick={() => setOpenDrawer(!openDrawer)} disableRipple className={classes.drawerIconContainer}>
+                        <MenuIcon className={classes.drawerIcon}/>
+                </IconButton>
+            </Fragment>
+        
+
+    )
+
     return(
         <Fragment>
             <ElevationScroll>
@@ -115,55 +219,8 @@ const Header = (props) =>{
                     <Toolbar disableGutters>
                         <Button component={Link} to="/" className={classes.logoContainer} onClick={()=> setValue(0)} disableRipple>
                             <img src={logo} alt="company logo" className={classes.logo} />  
-                        </Button>
-
-                        <Tabs value={value} className={classes.tabContainer} onChange={handleChange}>
-                            <Tab label="Home" className={classes.tab} component={Link} to="/"/>
-                            <Tab 
-                                aria-owns={anchorEl ? "simple-menu" : undefined}
-                                aria-haspopup={anchorEl ? "true" : undefined}
-                                onMouseOver={(event) => handleOpenMenuClick(event)}
-                                
-                                label="Services" 
-                                className={classes.tab} 
-                                component={Link} 
-                                to="/services"/>
-                            <Tab label="The Revolution" className={classes.tab} component={Link} to="/revolution"/>
-                            <Tab label="About us" className={classes.tab} component={Link} to="/about"/>
-                            <Tab label="Contact us" className={classes.tab} component={Link} to="/contact"/>
-                        </Tabs>  
-                        <Menu 
-                            id="simple-menu" 
-                            anchorEl={anchorEl} 
-                            open={open} 
-                            onClose={handleCloseMenuClick}
-                            MenuListProps={{onMouseLeave: handleCloseMenuClick}}
-                            classes={{paper: classes.menu}}
-                            elevation={0}
-                            >
-
-                            {
-
-                                menuOptions.map((option, i) => (
-                                    <MenuItem 
-                                    component={Link} 
-                                    to={option.link} 
-                                    classes={{root: classes.menuItem}}
-                                    onClick={event => {
-                                        console.log(i)
-                                        handleMenuItemClick(event, i);
-                                        setValue(1);
-                                        handleCloseMenuClick();
-                                    }} 
-                                    selected={i === selectedIndex && value === 1}
-                                    key={option.link}>
-                                    {option.name}
-                                    </MenuItem>
-
-                                ))
-                            }   
-                        </Menu>
-                        <Button variant="contained" color="secondary" className={classes.button}>Free Estimate</Button>
+                        </Button>                  
+                        {matches ? drawer : tabs}
                     </Toolbar>
 
                 </AppBar>
