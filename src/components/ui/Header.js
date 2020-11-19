@@ -15,6 +15,9 @@ import logo from '../../assets/logo.svg';
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import MenuIcon from "@material-ui/icons/Menu";
 import IconButton from "@material-ui/core/IconButton";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 
 const ElevationScroll = (props) => {
     const { children } = props;
@@ -202,7 +205,26 @@ const Header = (props) =>{
                     onOpen ={() => setOpenDrawer(true)}
                 >
                    
-                    Example drawer
+                    <List disablePadding>
+                        <ListItem divider button component={Link} to="/" onClick={() => setOpenDrawer(false)}>
+                            <ListItemText disableTypography>Home</ListItemText>
+                        </ListItem>
+                        <ListItem divider button component={Link} to="/services" onClick={() => setOpenDrawer(false)}>
+                            <ListItemText disableTypography>Services</ListItemText>
+                        </ListItem>
+                        <ListItem divider button component={Link} to="/revolution" onClick={() => setOpenDrawer(false)}>
+                            <ListItemText disableTypography>Revolution</ListItemText>
+                        </ListItem>
+                        <ListItem divider button component={Link} to="/about" onClick={() => setOpenDrawer(false)}>
+                            <ListItemText disableTypography>About</ListItemText>
+                        </ListItem>
+                        <ListItem divider button component={Link} to="/contact" onClick={() => setOpenDrawer(false)}>
+                            <ListItemText disableTypography>Contact us</ListItemText>
+                        </ListItem>
+                        <ListItem divider button component={Link} to="/estimate" onClick={() => setOpenDrawer(false)}>
+                            <ListItemText disableTypography>Estimate</ListItemText>
+                        </ListItem>
+                    </List>
                 </SwipeableDrawer>
                 <IconButton onClick={() => setOpenDrawer(!openDrawer)} disableRipple className={classes.drawerIconContainer}>
                         <MenuIcon className={classes.drawerIcon}/>
