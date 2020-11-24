@@ -94,6 +94,25 @@ const useStyles = makeStyles(theme => ({
     drawerIcon :{
         height: "50px",
         width: "50px"
+    },
+    drawer: {
+        backgroundColor: theme.palette.common.arcBlue
+    },
+    drawerItem : {
+        ...theme.typography.tab,
+        color: "white",
+        opacity: 0.7
+    },
+    drawerItemSelected : {
+        "& .MuiListItemText-root": {
+            opacity: 1
+        }
+    },
+    drawerItemEstimate : {
+        backgroundColor: theme.palette.common.arcOrange
+    },
+    appBar: {
+        zIndex: theme.zIndex.modal + 1
     }
 
 }))
@@ -132,33 +151,45 @@ const Header = (props) =>{
     }
 
     const menuOptions = [
-        {name: "Services", link:"/services"},
-        {name: "Custom Software", link:"/customersoftware"},
-        {name: "Mobile App development", link:"/mobileapps"},
-        {name: "Website", link:"/websites"}
+        {name: "Services", link:"/services", activeIndex: 1, selectedIndex: 0},
+        {name: "Custom Software", link:"/customersoftware", activeIndex: 1, selectedIndex: 1},
+        {name: "Mobile App development", link:"/mobileapps", activeIndex: 1, selectedIndex: 2},
+        {name: "Website", link:"/websites", activeIndex: 1, selectedIndex: 3}
+    ]
+
+    const routes = [
+        {name: "Home", link: "/", activeIndex: 0},
+        {name: "Services", link: "/services", activeIndex: 1, 
+            ariaOwns: anchorEl ? "simple-menu" : undefined, 
+            ariaPopup: anchorEl ? "true" : undefined,
+            mouseOver: (event) => handleOpenMenuClick(event)},
+        {name: "The Revolution", link: "/revolution", activeIndex: 2},
+        {name: "About us", link: "/about", activeIndex: 3},
+        {name: "Contact us", link: "/contact", activeIndex: 4}
     ]
 
     useEffect(() => {
-        RefreshRouter(setValue, setSelectedIndex, value);
+        RefreshRouter(setValue, selectedIndex,setSelectedIndex, value, routes, menuOptions);
 
-    }, [value])
+    }, [value, selectedIndex, routes, menuOptions])
 
     const tabs = (        
         <Fragment>
             <Tabs value={value} className={classes.tabContainer} onChange={handleChange}>
-                <Tab label="Home" className={classes.tab} component={Link} to="/"/>
-                <Tab 
-                    aria-owns={anchorEl ? "simple-menu" : undefined}
-                    aria-haspopup={anchorEl ? "true" : undefined}
-                    onMouseOver={(event) => handleOpenMenuClick(event)}
-                    
-                    label="Services" 
-                    className={classes.tab} 
-                    component={Link} 
-                    to="/services"/>
-                <Tab label="The Revolution" className={classes.tab} component={Link} to="/revolution"/>
-                <Tab label="About us" className={classes.tab} component={Link} to="/about"/>
-                <Tab label="Contact us" className={classes.tab} component={Link} to="/contact"/>
+                {
+                    routes.map((route, index) => (
+                        <Tab key={`${route}${index}`}
+                            className={classes.tab} 
+                            component={Link} 
+                            to={route.link} 
+                            label={route.name} 
+                            aria-owns={route.ariaOwns} 
+                            aria-haspopup={route.ariaPopup}
+                            onMouseOver={route.mouseOver}
+                            />
+
+                    ))
+                }
             </Tabs>  
             <Menu 
                 id="simple-menu" 
@@ -168,6 +199,8 @@ const Header = (props) =>{
                 MenuListProps={{onMouseLeave: handleCloseMenuClick}}
                 classes={{paper: classes.menu}}
                 elevation={0}
+                style={{zIndex: 1302}}
+                keepMounted
                 >
 
                 {
@@ -178,7 +211,6 @@ const Header = (props) =>{
                         to={option.link} 
                         classes={{root: classes.menuItem}}
                         onClick={event => {
-                            console.log(i)
                             handleMenuItemClick(event, i);
                             setValue(1);
                             handleCloseMenuClick();
@@ -203,26 +235,30 @@ const Header = (props) =>{
                     open={openDrawer}
                     onClose={() => setOpenDrawer(false)}
                     onOpen ={() => setOpenDrawer(true)}
-                >
-                   
+                    classes={{paper: classes.drawer}}                    
+                >       
+                    <div className={classes.toolbarMargin}></div>            
                     <List disablePadding>
-                        <ListItem divider button component={Link} to="/" onClick={() => setOpenDrawer(false)}>
-                            <ListItemText disableTypography>Home</ListItemText>
-                        </ListItem>
-                        <ListItem divider button component={Link} to="/services" onClick={() => setOpenDrawer(false)}>
-                            <ListItemText disableTypography>Services</ListItemText>
-                        </ListItem>
-                        <ListItem divider button component={Link} to="/revolution" onClick={() => setOpenDrawer(false)}>
-                            <ListItemText disableTypography>Revolution</ListItemText>
-                        </ListItem>
-                        <ListItem divider button component={Link} to="/about" onClick={() => setOpenDrawer(false)}>
-                            <ListItemText disableTypography>About</ListItemText>
-                        </ListItem>
-                        <ListItem divider button component={Link} to="/contact" onClick={() => setOpenDrawer(false)}>
-                            <ListItemText disableTypography>Contact us</ListItemText>
-                        </ListItem>
-                        <ListItem divider button component={Link} to="/estimate" onClick={() => setOpenDrawer(false)}>
-                            <ListItemText disableTypography>Estimate</ListItemText>
+                        {
+                            routes.map((route,index) => (
+                                <ListItem key={`${route}${route.activeIndex}`} divider button component={Link} to={route.link}
+                                    onClick={ () => {setOpenDrawer(false); setValue(route.activeIndex) }}
+                                    selected={value === index}
+                                    classes={{selected: classes.drawerItemSelected}}
+                                    >
+                                    <ListItemText disableTypography 
+                                    className={classes.drawerItem}>{route.name}</ListItemText>
+                                </ListItem>
+                            ))
+                        }
+                        <ListItem divider button 
+                        component={Link} 
+                        to="/estimate" 
+                        classes={{root: classes.drawerItemSelected, selected: classes.drawerItemSelected}}
+                        className={classes.drawerItemEstimate} 
+                        onClick={() => {setOpenDrawer(false); setValue(5) }}selected={value === 5}>
+                            <ListItemText disableTypography 
+                            className={classes.drawerItem}>Estimate</ListItemText>
                         </ListItem>
                     </List>
                 </SwipeableDrawer>
@@ -237,7 +273,7 @@ const Header = (props) =>{
     return(
         <Fragment>
             <ElevationScroll>
-                <AppBar position="fixed" color="primary">
+                <AppBar position="fixed" color="primary" className={classes.appBar}>
                     <Toolbar disableGutters>
                         <Button component={Link} to="/" className={classes.logoContainer} onClick={()=> setValue(0)} disableRipple>
                             <img src={logo} alt="company logo" className={classes.logo} />  
@@ -255,72 +291,24 @@ const Header = (props) =>{
 }
 
 
-const RefreshRouter = (setValue, setSelectedIndex, value) =>{
-
-    switch(window.location.pathname)
-    {
-        case "/": 
-            if(value !== 0)
-            {
-                setValue(0)
-            }
-            break;
-        case "/services": 
-            if(value !== 1)
-            {
-                setValue(1)
-                setSelectedIndex(0)
-            }
-            break;
-        case "/customersoftware": 
-            if(value !== 1)
-            {
-                setValue(1)
-                setSelectedIndex(1)
-            }
-            break;
-        case "/mobileapps": 
-            if(value !== 1)
-            {
-                setValue(1)
-                setSelectedIndex(2)
-            }
-            break;
-        case "/websites": 
-            if(value !== 1)
-            {
-                setValue(1)
-                setSelectedIndex(3)
-            }
-            break;
-        case "/revolution": 
-            if(value !== 2)
-            {
-                setValue(2)
-            }
-            break;
-        case "/about": 
-            if(value !== 3)
-            {
-                setValue(3)
-            }
-            break;
-        case "/contact": 
-            if(value !== 4)
-            {
-                setValue(4)
-            } 
-            break;
-        case "/estimate": 
-            if(value !== 5)
-            {
-                setValue(5)
-            } 
-            break;
-        default:
-            break;  
-    }
-
+const RefreshRouter = (setValue, selectedIndex, setSelectedIndex, value, routes, menuOptions) =>{
+    [...menuOptions, ...routes].forEach(route => {
+        switch(window.location.pathname)
+        {
+            case `${route.link}`:
+                if(value !== route.activeIndex)
+                {
+                    setValue(route.activeIndex)
+                    if(route.selectedIndex && route.selectedIndex !== selectedIndex)
+                    {
+                        setSelectedIndex(route.selectedIndex)
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    })
 
 }
 
