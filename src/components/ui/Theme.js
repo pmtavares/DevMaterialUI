@@ -19,6 +19,13 @@ const MyTheme = createMuiTheme({
 
     },
     typography:{
+        h2:{
+            fontFamily: "Raleway",
+            fontSize: "2.5rem",
+            fontWeight: 700,
+            color: `${arcBlue}`,
+            lineHeight: 1.5
+        },
         h5:{
             fontWeight: 600
         },
@@ -26,12 +33,14 @@ const MyTheme = createMuiTheme({
             fontSize: "1em",
             fontFamily: "Raleway",
             textTransform: "none",
-            fontWeight: "700"
+            fontWeight: "700",
+            
         },
         estimate:{
             fontFamily: "Pacifico",
             fontSize: "1rem",
             textTransform: "none",
+            color: "white"
         }
     }
 });
