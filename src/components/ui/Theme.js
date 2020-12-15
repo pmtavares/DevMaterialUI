@@ -3,6 +3,7 @@ import { createMuiTheme } from '@material-ui/core/styles'
 
 const arcBlue = "#0B72B9";
 const arcOrange = "#FFBA60";
+const arcGrey = "#868686";
 
 const MyTheme = createMuiTheme({
     palette: {
@@ -25,6 +26,26 @@ const MyTheme = createMuiTheme({
             fontWeight: 700,
             color: `${arcBlue}`,
             lineHeight: 1.5
+        },
+        h4:{
+            fontFamily: "Raleway",
+            fontSize: "1.7rem",
+            fontWeight: 700,
+            color: `${arcBlue}`,
+        },
+        subtitle1:{
+            fontSize: "1.25rem",
+            fontWeight: 300,
+            color: arcGrey,
+        },
+        learnButton :{
+            borderColor: arcBlue,
+            color: arcBlue,
+            borderWidth: 2,
+            textTransform: "none",
+            borderRadius: 50,
+            fontFamily: "Roboto",
+            fontWeight: "bold"
         },
         h5:{
             fontWeight: 600

@@ -152,7 +152,7 @@ const Header = (props) =>{
     const menuOptions = [
         {name: "Services", link:"/services", activeIndex: 1, selectedIndex: 0},
         {name: "Custom Software", link:"/customersoftware", activeIndex: 1, selectedIndex: 1},
-        {name: "Mobile App development", link:"/mobileapps", activeIndex: 1, selectedIndex: 2},
+        {name: "iOS/Android development", link:"/mobileapps", activeIndex: 1, selectedIndex: 2},
         {name: "Website", link:"/websites", activeIndex: 1, selectedIndex: 3}
     ]
 
