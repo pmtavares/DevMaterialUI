@@ -27,6 +27,11 @@ const MyTheme = createMuiTheme({
             color: `${arcBlue}`,
             lineHeight: 1.5
         },
+        h3: {
+            fontFamily: "Pacifico",
+            fontSize: "2.5rem",
+            color: arcBlue
+        },
         h4:{
             fontFamily: "Raleway",
             fontSize: "1.7rem",
@@ -37,6 +42,11 @@ const MyTheme = createMuiTheme({
             fontSize: "1.25rem",
             fontWeight: 300,
             color: arcGrey,
+        },
+        subtitle2:{
+            fontSize: "1.25rem",
+            fontWeight: 300,
+            color: "white",
         },
         learnButton :{
             borderColor: arcBlue,

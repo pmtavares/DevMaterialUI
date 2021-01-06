@@ -222,7 +222,13 @@ const Header = (props) =>{
                     ))
                 }   
             </Menu>
-            <Button variant="contained" color="secondary" className={classes.button}>Free Estimate</Button>
+            <Button variant="contained" 
+                    color="secondary" 
+                    className={classes.button} 
+                    component={Link} 
+                    to="/estimate"
+                    onClick={() => props.setValue(5)}
+                    >Free Estimate</Button>
         </Fragment>
     )
       
@@ -304,6 +310,9 @@ const RefreshRouter = (setValue, selectedIndex, setSelectedIndex, value, routes,
                     }
                 }
                 break;
+            case '/estimate':
+                setValue(5);
+                break;    
             default:
                 break;
         }
