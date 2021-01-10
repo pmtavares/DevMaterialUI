@@ -177,10 +177,10 @@ const LandingPage = (props) => {
           <Grid item style={{ marginLeft: matchesSM ? 0 : "5em", textAlign: matchesSM ? "center" : undefined }}>
             <Typography variant="h4">
               Custom Software Development
-                </Typography>
+            </Typography>
             <Typography variant="subtitle1" className={classes.subtitle}>
               Save energy. Save time. Save Money
-                </Typography>
+            </Typography>
             <Typography variant="subtitle1">
               Complete digital solutons, from investigations to <span className={classes.specialText}>celebration</span>
             </Typography>
