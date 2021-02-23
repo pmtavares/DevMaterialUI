@@ -26,7 +26,7 @@ const App = () => {
               }/>
             <Route exact path="/customersoftware" render={(props) => 
               <CustomSoftware {...props} setValue={setValue} setSelectedIndex={setSelectedIndex} />}/>
-            <Route exact path="/mobileapps" component={() => <MobileApps />}/>
+            <Route exact path="/mobileapps" component={(props) => <MobileApps {...props} setValue={setValue} setSelectedIndex={setSelectedIndex}/>}/>
             <Route exact path="/websites" component={() => <div>websites</div>}/>
             <Route exact path="/revolution" component={() => <div>revolution</div>}/>
             <Route exact path="/about" component={() => <div>about</div>}/>
